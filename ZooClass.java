@@ -4,12 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-//import java.nio.file.Path;
-//import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Scanner;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -30,6 +26,10 @@ import zooclass.entity.genderType;
  * @author sora
  */
 public class ZooClass {    
+
+    /**
+     *
+     */
     public static void getHeader() {
             System.out.println("=================================================================");
             System.out.println("==== Object Oriented Constructs - CCT ====");
@@ -313,13 +313,12 @@ public class ZooClass {
         for (Object a : animals)
         {
           animal = (JSONObject) a;
-          String a_id = (String) animal.get("exhibitNum");
+          String a_id = (String) animal.get("exhibitNum").toString();
           if(id.equals(a_id)){
               return animal;
           }
         }
-        
-        return animal;
+        return new JSONObject();
     }
     
     private static JSONObject findKeeper(String id) {
@@ -328,7 +327,7 @@ public class ZooClass {
         for (Object k : keppers)
         {
           kepper = (JSONObject) k;
-          String a_id = (String) kepper.get("id");
+          String a_id = (String) kepper.get("id").toString();
           if(id.equals(a_id)){
               return kepper;
           }
@@ -399,7 +398,7 @@ public class ZooClass {
                 
                 String input2 = in.next();
              
-                if(input2.equals("MA") || input2.equals("RE") || input2.equals("AV") || input2.equals("AQ") || input2.equals("IN")) {       
+                if(input2.equals("MA") || input2.equals("RE") || input2.equals("AV") || input2.equals("AQ") || input2.equals("IN")) {      
                     type = input2;
                     
                     System.out.println("==== Enter with the Animal Date of birthday ===== \n");
@@ -456,7 +455,7 @@ public class ZooClass {
 
                                             animals.add(a_return);
 
-                                            try(FileWriter file = new FileWriter("src/data/animais1.json")){
+                                            try(FileWriter file = new FileWriter("src/data/animais.json")){
                                                 file.write(animals.toString());
                                                 file.flush();
                                                 System.out.println("New Animal add succefull!");
@@ -485,6 +484,522 @@ public class ZooClass {
         }catch(NumberFormatException e) {
             System.out.println("Looks like you entered a non valid option");
         }
+    }
+    
+    private static void addNewKeeper() {
+        String name = "";
+        String animalType = "";
+        String animalType1 = "";
+        String animalType2 = "";
+    
+        System.out.println("==== Add a new Keeper ===== \n");
+        System.out.println("==== Enter with the Keeper name ===== \n");
+        try(Scanner in = new Scanner(System.in)) {
+            String input = in.next();
+            if(input.length() < 4){
+                System.out.println("Name of a Keeper must have at least 3 characters.");
+            }else{
+                name = input;
+                System.out.println("==== Enter with the Animal type 1 MA(Mammal), RE(Reptile), AV(Avian), AQ(Aquatic) or IN(Insect). ===== \n");
+                
+                String input2 = in.next();
+             
+                if(input2.equals("MA") || input2.equals("RE") || input2.equals("AV") || input2.equals("AQ") || input2.equals("IN")) {
+                    animalType = input2;
+                    System.out.println("==== Enter with the Animal type 2 MA(Mammal), RE(Reptile), AV(Avian), AQ(Aquatic) or IN(Insect). ===== \n");
+                    String input3 = in.next();
+                    
+                    if(input3.equals("MA") || input3.equals("RE") || input3.equals("AV") || input3.equals("AQ") || input3.equals("IN")) {
+                        animalType1 = input3;
+                        
+                        System.out.println("==== Enter with the Animal type 3 MA(Mammal), RE(Reptile), AV(Avian), AQ(Aquatic) or IN(Insect). ===== \n");
+                        String input4 = in.next();
+                        if(input4.equals("MA") || input4.equals("RE") || input4.equals("AV") || input4.equals("AQ") || input4.equals("IN")) {
+                            animalType2 = input4;
+                            String type = animalType+","+animalType1+","+animalType2;
+                            JSONArray keepers = getKeppers();
+                            JSONObject k_return = new JSONObject();
+                            Integer id = keepers.size();
+                            k_return.put("id", id + 1);
+                            k_return.put("name", name);
+                            k_return.put("animais_kp", "0");
+                            k_return.put("type", type);
+
+                            keepers.add(k_return);
+
+                            try(FileWriter file = new FileWriter("src/data/keppers.json")){
+                                file.write(keepers.toString());
+                                file.flush();
+                                System.out.println("New Keeper add succefull!");
+                            }catch(IOException e){
+                                e.printStackTrace();
+                            }
+                            
+                        }else{
+                            System.out.println("Looks like you entered a non valid option");
+                        }
+                        
+                    }else{
+                        System.out.println("Looks like you entered a non valid option");
+                    }
+                    
+                    
+                }else{
+                    System.out.println("Looks like you entered a non valid option");
+                }
+            }
+        }catch(NumberFormatException e) {
+            System.out.println("Looks like you entered a non valid option");
+        }
+    }
+    
+    private static void updateAnimal() {
+        String name = "";
+        String type = "";
+        String dateOfBirth = "";
+        String dateOfArrived = "";
+        String gender = "M";
+        String offspring = "";
+        String medication = "";
+        String vacine = "";
+        String kepper = "";
+        
+        System.out.println("==== Update Animal ===== \n");
+        
+        try(Scanner in = new Scanner(System.in)) {
+            
+            System.out.println("==== Type the Animal Exibition Number (Check Animals list if you are not sure about this information) ===== \n");
+            String aid = in.next();            
+            JSONObject animal = findAnimal(aid);
+            if(animal.isEmpty()) {
+                System.out.println("Looks like you entered a non valid Animal Exibition number (Check Animals list if you are not sure about this information)");
+            }else{
+                System.out.println("==== What you want to change? 1(Name), 2(Type), 3(Date of birthday), 4(Date of arrived), 5(Gender), 6(Offspring), 7(medication), 8(Vacine), 9(Keeper) ===== \n");
+                String input = in.next();
+                switch(input){
+                    //set Name
+                    case "1":
+                        System.out.println("==== Type the new Animal Name ===== \n");
+                        String nName = in.next();
+                        if(nName.length() > 3){
+                            animal.remove("name");
+                            Animals an =  new Animals();
+                            an.setName(nName);
+                            animal.put("name", an.getName());
+                            setAnimal(animal);
+                        }else{
+                            System.out.println("==== A new name must be at least 4 characters. ===== \n");
+                        }
+                    break;
+                    //set type
+                    case "2":
+                        System.out.println("==== Enter with the new Animal Type MA(Mammal), RE(Reptile), AV(Avian), AQ(Aquatic) or IN(Insect) ===== \n");
+                        String typeA = in.next();
+                        if(typeA.equals("MA") || typeA.equals("RE") || typeA.equals("AV") || typeA.equals("AQ") || typeA.equals("IN")) {
+                            animal.remove("type");
+                            Animals an =  new Animals();
+                            animalType atp = animalType.AQ;
+                            switch(typeA){
+                                case "MA":
+                                    atp = animalType.MA;
+                                break;
+
+                                case "RE":
+                                    atp = animalType.RE;
+                                break;
+
+                                case "AV":
+                                    atp = animalType.AV;
+                                break;
+
+                                case "AQ":
+                                    atp = animalType.AQ;
+                                break;
+
+                                case "IN":
+                                    atp = animalType.IN;
+                                break;
+                            }
+                            an.setType(atp);
+                            animal.put("type", an.getType().toString());
+                            setAnimal(animal);
+                        }else{
+                            System.out.println("Looks like you entered a non valid option");
+                        }
+                    break;
+                    //set data of birthday
+                    case "3":
+                        System.out.println("==== Type the new Animal Birthday ===== \n");
+                        String bday = in.next();
+                        if(bday.length() > 3){
+                            animal.remove("dateOfBirth");
+                            Animals an =  new Animals();
+                            an.setDateOfBirth(bday);
+                            animal.put("dateOfBirth", an.getDateOfBirth());
+                            setAnimal(animal);
+                        }else{
+                            System.out.println("==== A birth day date must be at least 4 characters. ===== \n");
+                        }
+                    break;
+                    //set data of arrived
+                    case "4":
+                        System.out.println("==== Type the new Animal Arrived date ===== \n");
+                        String aday = in.next();
+                        if(aday.length() > 3){
+                            animal.remove("dateOfBirth");
+                            Animals an =  new Animals();
+                            an.setDateOfArrived(aday);
+                            animal.put("dateOfArrived", an.getDateOfArrived());
+                            setAnimal(animal);
+                        }else{
+                            System.out.println("==== A arrived day date must be at least 4 characters. ===== \n");
+                        }
+                    break;
+                    //set Gender
+                    case "5":
+                        System.out.println("==== Type the new Animal gender M(Male), F(Female) ===== \n");
+                        String ag = in.next();
+                        if(ag.equals("M") || ag.equals("F")) {
+                            animal.remove("gender");
+                            Animals an =  new Animals();
+                            genderType gen = (  ag.equals("M")) ? genderType.M : genderType.F;
+                            an.setGender(gen);
+                            animal.put("gender", an.getGender().toString());
+                            setAnimal(animal);
+                        }else{
+                            System.out.println("Looks like you entered a non valid option");
+                        }
+                    break;
+                    //set offspring
+                    case "6":
+                        System.out.println("==== Type the new Animal offspring ===== \n");
+                        String offsp = in.next();
+                        if(offsp.length() > 3){
+                            animal.remove("offspring");
+                            Animals an =  new Animals();
+                            an.setOffspring(offsp);
+                            animal.put("offspring", an.getOffspring());
+                            setAnimal(animal);
+                        }else{
+                            System.out.println("==== A new name must be at least 4 characters. ===== \n");
+                        }
+                    break;
+                    //set medication
+                    case "7":
+                        System.out.println("==== Type the new Animal Medication ===== \n");
+                        String med = in.next();
+                        if(med.length() > 3){
+                            animal.remove("medication");
+                            Animals an =  new Animals();
+                            an.setMedication(med);
+                            animal.put("medication", an.getMedication());
+                            setAnimal(animal);
+                        }else{
+                            System.out.println("==== A Medication name must be at least 4 characters. ===== \n");
+                        }
+                    break;
+                    //set vacine
+                    case "8":
+                        System.out.println("==== Type the new Animal Vacine ===== \n");
+                        String vac = in.next();
+                        if(vac.length() > 3){
+                            animal.remove("vacine");
+                            Animals an =  new Animals();
+                            an.setVacine(vac);
+                            animal.put("vacine", an.getVacine());
+                            setAnimal(animal);
+                        }else{
+                            System.out.println("==== A new vacine name must be at least 4 characters. ===== \n");
+                        }
+                    break;
+                    //set keeper
+                    case "9":
+                        //todo check if type is allowed, check limit 10, olhar se o keeper existe
+                        System.out.println("Enter with the Kepper ID (Check keppers list if you are not sure about this information)");
+                        String kpid = in.next();
+                        JSONObject result = findKeeper(kpid);
+                        String anT = (String) animal.get("type");
+                        //check if the kepper exist
+                        if(result.isEmpty()) {
+                            System.out.println("Looks like you entered a non valid kepper ID (Check keppers list if you are not sure about this information)");
+                        }else{
+                            //check if the keeper has permission to take care of this kind of animal
+                            if(!checkIfTypeIsAllowed(kpid, anT)){
+                                System.out.println("This keeper is not allowed to take care of this type of animal.");
+                            }else{
+                                String an_kpp = (String) result.get("animais_kp");
+                                Integer akpp = Integer.valueOf(an_kpp);
+                                //check if the keeper has no longer more than 10 animals
+                                if(akpp >= 10){
+                                    System.out.println("This keeper is already taking care of 10 animals, chose another one.");
+                                }else{
+                                    animal.remove("k_id");
+                                    Animals an =  new Animals();
+                                    Integer ki = Integer.valueOf(kpid);
+                                    Kepper kpe = new Kepper();
+                                    kpe.setId(ki);
+                                    an.setKepper(kpe);
+                                    animal.put("k_id", an.getKepper().getId());
+                                    setAnimal(animal);
+                                }
+                            }
+                    }
+                    break;
+                }
+            }
+        }catch(NumberFormatException e) {
+            System.out.println("Looks like you entered a non valid option");
+        }
+        
+    }
+    
+    private static void updateKepper() {
+        String name = "";
+        String animalType0 = "";
+        String animalType1 = "";
+        String animalType2 = "";
+        
+        System.out.println("==== Update Keeper ===== \n");
+        
+        try(Scanner in = new Scanner(System.in)) {
+            
+            System.out.println("==== Type the Keeper ID (Check keepers list if you are not sure about this information) ===== \n");
+            
+            String keid = in.next();            
+            JSONObject keeper = findKeeper(keid);
+            //check if the kepper exist
+            if(keeper.isEmpty()) {
+                System.out.println("Looks like you entered a non valid kepper ID (Check keppers list if you are not sure about this information)");
+            }else{
+                System.out.println("==== What you want to change? 1(Name), 2(Type 1), 3(Type 2), 4(Type 3) ===== \n");
+                String input = in.next();
+
+                if(input.equals("1") || input.equals("2") || input.equals("3") || input.equals("4") ){
+                    switch(input){
+                        //modify keeper name
+                        case "1":
+                            System.out.println("==== Type the new Keeper Name ===== \n");
+                            String nName = in.next();
+                            if(nName.length() > 3){
+                                keeper.remove("name");
+                                Kepper kp =  new Kepper();
+                                kp.setName(nName);
+                                keeper.put("name", kp.getName());
+                                setKeeper(keeper);
+                            }else{
+                                System.out.println("==== A new name must be at least 4 characters. ===== \n");
+                            }
+                        break;
+                        
+                        //modify keeper type 1
+                        case "2":
+                            System.out.println("==== Enter with the Type 1 MA(Mammal), RE(Reptile), AV(Avian), AQ(Aquatic) or IN(Insect) ===== \n");
+                            String tp = in.next();
+                            animalType atp = animalType.AQ;
+                            if(tp.equals("MA") || tp.equals("RE") || tp.equals("AV") || tp.equals("AQ") || tp.equals("IN") ){
+                                Kepper kp =  new Kepper();
+                                switch(tp){
+                                    case "MA":
+                                        atp = animalType.MA;
+                                    break;
+
+                                    case "RE":
+                                        atp = animalType.RE;
+                                    break;
+
+                                    case "AV":
+                                        atp = animalType.AV;                           
+                                    break;
+
+                                    case "AQ":
+                                        atp = animalType.AQ;                                        
+                                    break;
+
+                                    case "IN":
+                                        atp = animalType.IN;
+                                    break;
+                                }
+                                
+                                kp.setType(atp);
+                                Integer kpid = Integer.valueOf(keid);
+                                kp.setId(kpid);
+                                setKeeperType(1, kp);
+                            }else{
+                                System.out.println("Looks like you entered a non valid option");
+                            }
+                        break;
+                        
+                        //modify keeper type 2
+                        case "3":
+                            System.out.println("==== Enter with the Type 2 MA(Mammal), RE(Reptile), AV(Avian), AQ(Aquatic) or IN(Insect) ===== \n");
+                            String tp2 = in.next();
+                            animalType atp2 = animalType.AQ;
+                            if(tp2.equals("MA") || tp2.equals("RE") || tp2.equals("AV") || tp2.equals("AQ") || tp2.equals("IN") ){
+                                Kepper kp =  new Kepper();
+                                switch(tp2){
+                                    case "MA":
+                                        atp2 = animalType.MA;
+                                    break;
+
+                                    case "RE":
+                                        atp2 = animalType.RE;
+                                        
+                                    break;
+
+                                    case "AV":
+                                        atp2 = animalType.AV;
+                                       
+                                    break;
+
+                                    case "AQ":
+                                        atp2 = animalType.AQ;
+                                        
+                                    break;
+
+                                    case "IN":
+                                        atp2 = animalType.IN;
+                                    break;
+                                }
+                                
+                                kp.setType1(atp2);
+                                Integer kpid = Integer.valueOf(keid);
+                                kp.setId(kpid);
+                                setKeeperType(2, kp);
+                            }else{
+                                System.out.println("Looks like you entered a non valid option");
+                            }
+
+                        break;
+                        
+                        //modify keeper type 3
+                        case "4":
+                            System.out.println("==== Enter with the Type 3 MA(Mammal), RE(Reptile), AV(Avian), AQ(Aquatic) or IN(Insect) ===== \n");
+                            String tp3 = in.next();
+                            animalType atp3 = animalType.AQ;
+                            if(tp3.equals("MA") || tp3.equals("RE") || tp3.equals("AV") || tp3.equals("AQ") || tp3.equals("IN") ){
+                                Kepper kp =  new Kepper();
+                                switch(tp3){
+                                    case "MA":
+                                        atp3 = animalType.MA;
+                                    break;
+
+                                    case "RE":
+                                        atp3 = animalType.RE;
+                                        
+                                    break;
+
+                                    case "AV":
+                                        atp3 = animalType.AV;
+                                       
+                                    break;
+
+                                    case "AQ":
+                                        atp3 = animalType.AQ;
+                                        
+                                    break;
+
+                                    case "IN":
+                                        atp3 = animalType.IN;
+                                    break;
+                                }
+                                
+                                kp.setType2(atp3);
+                                Integer kpid = Integer.valueOf(keid);
+                                kp.setId(kpid);
+                                setKeeperType(3, kp);
+                            }else{
+                                System.out.println("Looks like you entered a non valid option");
+                            }
+
+                        break;
+                    }
+                }else{
+                    System.out.println("Looks like you entered a non valid option");
+                }
+            }
+            
+        }catch(NumberFormatException e) {
+            System.out.println("Looks like you entered a non valid option");
+        }
+    }
+    
+    private static void setAnimal(JSONObject an) {
+        JSONArray animals = getAnimals();
+        JSONObject animal = new JSONObject();
+        String id = (String) an.get("exhibitNum").toString();
+       
+        for (Object k : animals)
+        {
+          animal = (JSONObject) k;
+          String a_id = (String)animal.get("exhibitNum").toString();
+          if(id.equals(a_id)){
+              Integer idSet = Integer.valueOf(a_id);
+              //set the new value
+              animals.set(idSet - 1, an);
+          }
+        }
+        
+        //then, modify the JSON with the new keepers list
+        try(FileWriter file = new FileWriter("src/data/animais.json")){
+            file.write(animals.toString());
+            file.flush();
+            System.out.println("Animal information succefull updated!");
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    
+    private static void setKeeper(JSONObject kp) {
+        
+        JSONArray keepers = getKeppers();
+        JSONObject keeper = new JSONObject();
+        String id = (String) kp.get("id").toString();
+       
+        for (Object k : keepers)
+        {
+          keeper = (JSONObject) k;
+          String a_id = (String)keeper.get("id").toString();
+          if(id.equals(a_id)){
+              Integer idSet = Integer.valueOf(a_id);
+              //set the new value
+              keepers.set(idSet - 1, kp);
+          }
+        }
+        
+        //then, modify the JSON with the new keepers list
+        try(FileWriter file = new FileWriter("src/data/keppers.json")){
+            file.write(keepers.toString());
+            file.flush();
+            System.out.println("Keeper information succefull updated!");
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    
+    private static void setKeeperType(Integer step, Kepper kp) {
+        Long id = kp.getId();
+        String keid = String.valueOf(id);
+        JSONObject keeper = findKeeper(keid);
+        String tp = (String)keeper.get("type");
+        keeper.remove("type");
+        String types[]= tp.split(",");
+        
+        if(step == 1){    
+            keeper.put("type", kp.getType()+","+types[1]+","+types[2]);
+            setKeeper(keeper);
+        }else if(step == 2){
+            keeper.put("type", types[0]+","+kp.getType1()+","+types[2]);
+            setKeeper(keeper);
+        }else{
+            keeper.put("type", types[0]+","+types[1]+","+kp.getType2());
+            setKeeper(keeper);
+        }
+    }
+    
+    private static JSONArray deleteKepperFromArray(Integer id) {
+        JSONArray keepers = getKeppers();
+        keepers.remove(id -1);
+        return keepers;
     }
     
     private static boolean checkIfTypeIsAllowed(String id, String AnimalType) {
@@ -530,15 +1045,18 @@ public class ZooClass {
                 break;
                 
                 case "F":
-                    //TODO add new kepper
+                    //add new kepper
+                    addNewKeeper();
                 break;
                 
                 case "G":
-                    //TODO get all animais
+                    //Update animal
+                    updateAnimal();
                 break;
                 
                 case "H":
-                    //TODO get all animais
+                    //Update Keeper
+                    updateKepper();
                 break;
                 
                 default:

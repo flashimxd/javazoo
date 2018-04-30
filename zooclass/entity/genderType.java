@@ -1,16 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package zooclass.entity;
 
 /**
  *
- * @author sora
+//// * @author sora
  */
 public enum genderType {
+
+    /**
+     *
+     */
     M("Male"),
+
+    /**
+     *
+     */
     F("Female");
     
     private String description;
@@ -22,6 +25,12 @@ public enum genderType {
    /*
    * @return the description
    */
+
+    /**
+     *
+     * @return
+     */
+
    public String getDescription() {
            return description;
    }

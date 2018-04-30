@@ -11,6 +11,19 @@ package zooclass.entity;
  */
 public class Insect extends Animals{
 
+    /**
+     *
+     * @param exhibitNum
+     * @param Type
+     * @param name
+     * @param dateOfBirth
+     * @param dateOfArrived
+     * @param gender
+     * @param offspring
+     * @param medication
+     * @param vacine
+     * @param kepper
+     */
     public Insect(long exhibitNum, animalType Type, String name, String dateOfBirth, String dateOfArrived, genderType gender, String offspring, String medication, String vacine, Kepper kepper) {
         super(exhibitNum, Type, name, dateOfBirth, dateOfArrived, gender, offspring, medication, vacine, kepper);
     }

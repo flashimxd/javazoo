@@ -5,11 +5,31 @@ package zooclass.entity;
  * @author sora
  */
 public enum animalType {
-        MA("Mammal"),
-        RE("Reptile"),
-        AV("Avian"),
-        AQ("Aquatic"),
-        IN("Insect"); 
+
+    /**
+     *
+     */
+    MA("Mammal"),
+
+    /**
+     *
+     */
+    RE("Reptile"),
+
+    /**
+     *
+     */
+    AV("Avian"),
+
+    /**
+     *
+     */
+    AQ("Aquatic"),
+ 
+    /**
+     *
+     */
+    IN("Insect"); 
     
     private String description;
     
