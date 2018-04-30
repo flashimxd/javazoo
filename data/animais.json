@@ -1,0 +1,38 @@
+[
+  {
+    "exhibitNum" : "1",
+    "name": "Meowsy",
+    "type" : "MA",
+    "dateOfBirth": "2016-06-12",
+    "dateOfArrived": "2013-02-10",
+    "gender": "M",
+    "offspring": "offdaee",
+    "medication": "Acetylsalicylic acid",
+    "vacine": "Pirone",
+    "k_id": "1"
+  },
+  {
+    "exhibitNum" : "2",
+    "name": "Lusk",
+    "type" : "AV",
+    "dateOfBirth": "2016-06-12",
+    "dateOfArrived": "2016-06-12",
+    "gender": "M",
+    "offspring": "rujs",
+    "medication": "Diclofenac-Asteria",
+    "vacine": "Trusne",
+    "k_id": "2"
+  },
+  {
+    "exhibitNum" : "3",
+    "name": "Nika",
+    "type" : "AQ",
+    "dateOfBirth": "2012-06-12",
+    "dateOfArrived": "2017-06-12",
+    "gender": "F",
+    "offspring": "sjuddd",
+    "medication": "Tylenol",
+    "vacine": "Tyus",
+    "k_id": "3"
+  }
+]

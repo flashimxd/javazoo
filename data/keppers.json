@@ -1,0 +1,20 @@
+[
+  {
+    "id" : "1",
+    "name": "Louis Marielle",
+    "type" : "MA,RE,AQ",
+    "animais_kp":"4" 
+  },
+  {
+    "id" : "2",
+    "name": "Neto Branch",
+    "type" : "RE,MA,IN",
+    "animais_kp":"6" 
+  },
+  {
+    "id" : "3",
+    "name": "Lineoro Jansen",
+    "type" : "AV,MA,AV",
+    "animais_kp":"10" 
+  }
+]
